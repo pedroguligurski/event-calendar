@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import type { Evento, ListarEventosResponse } from '@eventos/shared'
+import type { Evento, ListarEventosResponse } from '@events/shared'
 
 const app = express()
 const PORT = process.env.PORT || 3000
