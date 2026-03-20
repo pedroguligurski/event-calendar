@@ -1,13 +1,4 @@
-export type Evento = {
-	id: number
-	nome: string
-	descricao: string
-	data: string
-	local: string
-	categoria: string
-}
-
-export type ListarEventosResponse = {
-	data: Evento[]
-	total: number
-}
+export * from './events/create-event.dto.js'
+export * from './users/create-user.dto.js'
+export * from './auth/magic-link.dto.js'
+export * from './auth/admin-auth.dto.js'

@@ -55,3 +55,25 @@ npm run dev -w frontend   # http://localhost:5173
 ```bash
 npm run build
 ```
+
+## Variaveis de ambiente (backend)
+
+Defina as variaveis abaixo para o fluxo de autenticacao funcionar corretamente:
+
+```bash
+JWT_SECRET=seu_jwt_secret
+MAGIC_LINK_SECRET=seu_magic_link_secret
+FRONTEND_URL=http://localhost:5173
+JWT_EXPIRES_IN=7d
+MAGIC_LINK_EXPIRES_IN=15m
+
+# SMTP (obrigatorio em producao)
+MAIL_FROM=no-reply@cwb-connect.local
+SMTP_HOST=smtp.seudominio.com
+SMTP_PORT=587
+SMTP_USER=usuario_smtp
+SMTP_PASS=senha_smtp
+SMTP_SECURE=false
+```
+
+Em desenvolvimento, se SMTP nao estiver configurado, o endpoint de magic link retorna o link na resposta para facilitar testes.

@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -12,7 +11,7 @@ model Admin {
   name         String
   email        String    @unique
   passwordHash String    @map("password_hash")
-  createdAt    DateTime? @default(now()) @db.Timestamp(6) @map("created_at")
+  createdAt    DateTime? @default(now()) @map("created_at") @db.Timestamp(6)
 
   @@map("admins")
 }
@@ -23,28 +22,29 @@ model User {
   surname     String
   displayName String?   @map("display_name")
   email       String    @unique
-  dateOfBirth DateTime? @db.Date @map("date_of_birth")
-  createdAt   DateTime? @default(now()) @db.Timestamp(6) @map("created_at")
+  dateOfBirth DateTime? @map("date_of_birth") @db.Date
+  createdAt   DateTime? @default(now()) @map("created_at") @db.Timestamp(6)
   events      Event[]
 
   @@map("users")
 }
 
 model Event {
-  id               Int            @id @default(autoincrement())
-  startDateAndTime DateTime       @db.Timestamp(6) @map("start_date_and_time")
-  endDateAndTime   DateTime       @db.Timestamp(6) @map("end_date_and_time")
+  id               Int               @id @default(autoincrement())
+  startDateAndTime DateTime          @map("start_date_and_time") @db.Timestamp(6)
+  endDateAndTime   DateTime          @map("end_date_and_time") @db.Timestamp(6)
   title            String
   resume           String?
   description      String?
-  eventFormat      EventFormat    @map("event_format")
-  transmissionLink String?        @map("transmission_link")
-  ticketPrice      Decimal?       @default(0) @db.Decimal(10, 2) @map("ticket_price")
-  ticketPlatform   String?        @map("ticket_platform")
-  createdAt        DateTime?      @default(now()) @db.Timestamp(6) @map("created_at")
-  updatedAt        DateTime?      @default(now()) @db.Timestamp(6) @map("updated_at")
-  userId           Int            @map("user_id")
-  user             User           @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_events_user")
+  eventFormat      EventFormat       @map("event_format")
+  transmissionLink String?           @map("transmission_link")
+  ticketPrice      Decimal?          @default(0) @map("ticket_price") @db.Decimal(10, 2)
+  ticketPlatform   String?           @map("ticket_platform")
+  createdAt        DateTime?         @default(now()) @map("created_at") @db.Timestamp(6)
+  updatedAt        DateTime?         @default(now()) @map("updated_at") @db.Timestamp(6)
+  userId           Int               @map("user_id")
+  status           EventStatus @default(Pending)
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_events_user")
   eventToThemes    EventToTheme[]
   location         Location?
   speakers         Speaker[]
@@ -53,11 +53,11 @@ model Event {
 }
 
 model EventToTheme {
-  id      Int    @id @default(autoincrement())
-  eventId Int    @map("event_id")
-  themeId Int    @map("theme_id")
-  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_event")
-  theme   Theme  @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_theme")
+  id      Int   @id @default(autoincrement())
+  eventId Int   @map("event_id")
+  themeId Int   @map("theme_id")
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_event")
+  theme   Theme @relation(fields: [themeId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fk_theme")
 
   @@unique([eventId, themeId], map: "unique_event_theme")
   @@map("events_to_themes")
@@ -108,4 +108,12 @@ enum EventFormat {
   Hybrid     @map("hybrid")
 
   @@map("event_format_enum")
+}
+
+enum EventStatus {
+  Pending  @map("draft")
+  Approved @map("published")
+  Rejected @map("canceled")
+
+  @@map("event_status_enum")
 }

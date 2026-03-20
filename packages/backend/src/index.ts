@@ -1,6 +1,12 @@
+import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
-import type { Evento, ListarEventosResponse } from '@events/shared'
+import eventsRouter from './modules/events/events.routes.js'
+import adminEventsRouter from './modules/events/admin-events.routes.js'
+import usersRouter from './modules/users/users.routes.js'
+import authRouter from './modules/auth/auth.routes.js'
+import { errorHandler } from './middlewares/error-handler.js'
+import './env.js'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -12,18 +18,12 @@ app.get('/health', (_req, res) => {
   res.json({ status: 'ok', message: 'Servidor de eventos rodando!' })
 })
 
-const eventos: Evento[] = [
-  { id: 1, nome: 'Tech Summit RJ', descricao: 'Maior evento de tecnologia do RJ', data: '2026-04-10', local: 'Rio de Janeiro', categoria: 'tecnologia' },
-  { id: 2, nome: 'Vue.js Meetup', descricao: 'Encontro da comunidade Vue', data: '2026-05-20', local: 'Online', categoria: 'tecnologia' },
-]
+app.use('/api/events', eventsRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/auth', authRouter)
+app.use('/admin/events', adminEventsRouter)
 
-app.get('/api/eventos', (_req, res) => {
-  const response: ListarEventosResponse = {
-    data: eventos,
-    total: eventos.length,
-  }
-  res.json(response)
-})
+app.use(errorHandler)
 
 app.listen(PORT, () => {
   console.log(`Backend rodando em http://localhost:${PORT}`)
