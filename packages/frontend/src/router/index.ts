@@ -8,6 +8,11 @@ const router = createRouter({
 			name: 'home',
 			component: () => import('../views/HomePage.vue'),
 		},
+		{
+			path: '/auth/verify',
+			name: 'auth-verify',
+			component: () => import('../views/AuthVerifyView.vue'),
+		},
 	],
 })
 
