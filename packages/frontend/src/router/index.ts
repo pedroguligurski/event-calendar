@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HeroSection from '../views/Herosection.vue'
 
 const router = createRouter({
 	history: createWebHistory(),
@@ -7,7 +6,7 @@ const router = createRouter({
 		{
 			path: '/',
 			name: 'home',
-			component: HeroSection,
+			component: () => import('../views/HomePage.vue'),
 		},
 	],
 })
